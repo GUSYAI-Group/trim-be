@@ -55,7 +55,7 @@ SET FOREIGN_KEY_CHECKS = 1;
 
 -- Tabel Users: Akun login sentral (PRD 6, TRD 30: Owner, Manager, Admin, Barber, Customer)
 CREATE TABLE `users` (
-    `id` CHAR(36) NOT NULL DEFAULT (UUID()),
+    `id` CHAR(36) NOT NULL ,
     `email` VARCHAR(191) NOT NULL,
     `password_hash` VARCHAR(255) NOT NULL,
     `role` ENUM('owner', 'manager', 'admin', 'barber', 'customer') NOT NULL DEFAULT 'customer',
@@ -69,7 +69,7 @@ CREATE TABLE `users` (
 
 -- Tabel Memberships: Tingkatan keanggotaan (FSD 23: Silver, Gold, Platinum)
 CREATE TABLE `memberships` (
-    `id` CHAR(36) NOT NULL DEFAULT (UUID()),
+    `id` CHAR(36) NOT NULL ,
     `tier_name` VARCHAR(50) NOT NULL,
     `discount_percentage` DECIMAL(5, 2) NOT NULL DEFAULT 0.00,
     `minimum_points_required` INT UNSIGNED NOT NULL DEFAULT 0,
@@ -93,7 +93,7 @@ CREATE TABLE `face_shapes` (
 
 -- Tabel Barbers: Profil kapster (FSD 14, Epic 3)
 CREATE TABLE `barbers` (
-    `id` CHAR(36) NOT NULL DEFAULT (UUID()),
+    `id` CHAR(36) NOT NULL ,
     `user_id` CHAR(36) NOT NULL,
     `full_name` VARCHAR(100) NOT NULL,
     `phone_number` VARCHAR(20) NOT NULL,
@@ -114,7 +114,7 @@ CREATE TABLE `barbers` (
 
 -- Tabel Services: Katalog paket dan layanan pangkas (FSD 13)
 CREATE TABLE `services` (
-    `id` CHAR(36) NOT NULL DEFAULT (UUID()),
+    `id` CHAR(36) NOT NULL ,
     `name` VARCHAR(100) NOT NULL,
     `category` VARCHAR(50) NOT NULL DEFAULT 'Haircut',
     `duration_minutes` INT UNSIGNED NOT NULL DEFAULT 30,
@@ -131,7 +131,7 @@ CREATE TABLE `services` (
 
 -- Tabel Hairstyles: Katalog model gaya rambut (FSD 12)
 CREATE TABLE `hairstyles` (
-    `id` CHAR(36) NOT NULL DEFAULT (UUID()),
+    `id` CHAR(36) NOT NULL ,
     `name` VARCHAR(100) NOT NULL,
     `image_url` VARCHAR(255) NULL,
     `description` TEXT NULL,
@@ -158,7 +158,7 @@ CREATE TABLE `hairstyle_face_shapes` (
 
 -- Tabel Customers: Profil pelanggan (FSD 10: favorit barber, favorit gaya, bentuk wajah, poin)
 CREATE TABLE `customers` (
-    `id` CHAR(36) NOT NULL DEFAULT (UUID()),
+    `id` CHAR(36) NOT NULL ,
     `user_id` CHAR(36) NOT NULL,
     `full_name` VARCHAR(100) NOT NULL,
     `phone_number` VARCHAR(20) NOT NULL,
@@ -183,7 +183,7 @@ CREATE TABLE `customers` (
 
 -- Tabel Barber Schedules: Shift kerja berkala kapster (FSD 15)
 CREATE TABLE `barber_schedules` (
-    `id` CHAR(36) NOT NULL DEFAULT (UUID()),
+    `id` CHAR(36) NOT NULL ,
     `barber_id` CHAR(36) NOT NULL,
     `day_of_week` ENUM('Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu') NOT NULL,
     `start_time` TIME NULL,
@@ -202,7 +202,7 @@ CREATE TABLE `barber_schedules` (
 
 -- Tabel AI Analyses: Riwayat deteksi computer vision
 CREATE TABLE `ai_analyses` (
-    `id` CHAR(36) NOT NULL DEFAULT (UUID()),
+    `id` CHAR(36) NOT NULL ,
     `customer_id` CHAR(36) NULL,
     `detected_face_shape_id` INT UNSIGNED NOT NULL,
     `confidence_score` DECIMAL(5, 2) NOT NULL,
@@ -217,7 +217,7 @@ CREATE TABLE `ai_analyses` (
 
 -- Tabel AI Recommendations: Rekomendasi gaya rambut teratas
 CREATE TABLE `ai_recommendations` (
-    `id` CHAR(36) NOT NULL DEFAULT (UUID()),
+    `id` CHAR(36) NOT NULL ,
     `analysis_id` CHAR(36) NOT NULL,
     `hairstyle_id` CHAR(36) NOT NULL,
     `match_percentage` DECIMAL(5, 2) NOT NULL,
@@ -233,7 +233,7 @@ CREATE TABLE `ai_recommendations` (
 
 -- Tabel Bookings: Reservasi pangkas rambut
 CREATE TABLE `bookings` (
-    `id` CHAR(36) NOT NULL DEFAULT (UUID()),
+    `id` CHAR(36) NOT NULL ,
     `booking_code` VARCHAR(20) NOT NULL,
     `customer_id` CHAR(36) NOT NULL,
     `barber_id` CHAR(36) NOT NULL,
@@ -263,7 +263,7 @@ CREATE TABLE `bookings` (
 
 -- Tabel Booking Services: Relasi Many-to-Many booking dan item layanan
 CREATE TABLE `booking_services` (
-    `id` CHAR(36) NOT NULL DEFAULT (UUID()),
+    `id` CHAR(36) NOT NULL ,
     `booking_id` CHAR(36) NOT NULL,
     `service_id` CHAR(36) NOT NULL,
     `price_at_booking` DECIMAL(12, 2) NOT NULL,
@@ -275,7 +275,7 @@ CREATE TABLE `booking_services` (
 
 -- Tabel Queues: Antrean fisik digital (FSD 17, Epic 2 AC 2.4)
 CREATE TABLE `queues` (
-    `id` CHAR(36) NOT NULL DEFAULT (UUID()),
+    `id` CHAR(36) NOT NULL ,
     `booking_id` CHAR(36) NOT NULL,
     `queue_number` VARCHAR(20) NOT NULL COMMENT 'Format nomor antrean e.g. A-023',
     `estimated_wait_time_mins` INT UNSIGNED NOT NULL DEFAULT 0,
@@ -294,7 +294,7 @@ CREATE TABLE `queues` (
 
 -- Tabel Payments: Transaksi QRIS via Pakkasir (FSD 19, Epic 2 AC 2.2: 15 menit countdown)
 CREATE TABLE `payments` (
-    `id` CHAR(36) NOT NULL DEFAULT (UUID()),
+    `id` CHAR(36) NOT NULL ,
     `booking_id` CHAR(36) NOT NULL,
     `payment_method` VARCHAR(30) NOT NULL DEFAULT 'QRIS',
     `qris_reference_id` VARCHAR(100) NULL COMMENT 'Ref ID dari Pakkasir QRIS Gateway',
@@ -315,7 +315,7 @@ CREATE TABLE `payments` (
 
 -- Tabel Reviews: Ulasan, rating kapster, servis, kepuasan gaya & foto hasil cukur (FSD 21, Epic 3)
 CREATE TABLE `reviews` (
-    `id` CHAR(36) NOT NULL DEFAULT (UUID()),
+    `id` CHAR(36) NOT NULL ,
     `booking_id` CHAR(36) NOT NULL,
     `customer_id` CHAR(36) NOT NULL,
     `barber_id` CHAR(36) NOT NULL,
@@ -338,7 +338,7 @@ CREATE TABLE `reviews` (
 
 -- Tabel Customer Haircut History: Riwayat foto & potongan haircut untuk kapster (FSD Epic 3 AC 3.2)
 CREATE TABLE `customer_haircut_history` (
-    `id` CHAR(36) NOT NULL DEFAULT (UUID()),
+    `id` CHAR(36) NOT NULL ,
     `customer_id` CHAR(36) NOT NULL,
     `booking_id` CHAR(36) NOT NULL,
     `barber_id` CHAR(36) NOT NULL,
@@ -361,7 +361,7 @@ CREATE TABLE `customer_haircut_history` (
 
 -- Tabel Products: Master produk (Pomade, Wax, Shampoo, Hair tonic, Hair color, Towel, Consumables)
 CREATE TABLE `products` (
-    `id` CHAR(36) NOT NULL DEFAULT (UUID()),
+    `id` CHAR(36) NOT NULL ,
     `sku` VARCHAR(50) NULL,
     `name` VARCHAR(100) NOT NULL,
     `category` VARCHAR(50) NOT NULL,
@@ -381,7 +381,7 @@ CREATE TABLE `products` (
 
 -- Tabel Inventory Transactions: Log mutasi stok produk (FSD 25)
 CREATE TABLE `inventory_transactions` (
-    `id` CHAR(36) NOT NULL DEFAULT (UUID()),
+    `id` CHAR(36) NOT NULL ,
     `product_id` CHAR(36) NOT NULL,
     `transaction_type` ENUM('stock_in', 'stock_out', 'adjustment') NOT NULL,
     `quantity` INT NOT NULL,
@@ -402,7 +402,7 @@ CREATE TABLE `inventory_transactions` (
 
 -- Tabel Loyalty Transactions: Transaksi poin loyalitas (FSD 22: Rp10.000 = 10 pts)
 CREATE TABLE `loyalty_transactions` (
-    `id` CHAR(36) NOT NULL DEFAULT (UUID()),
+    `id` CHAR(36) NOT NULL ,
     `customer_id` CHAR(36) NOT NULL,
     `points` INT NOT NULL,
     `transaction_type` ENUM('earn', 'redeem', 'adjustment') NOT NULL,
@@ -416,7 +416,7 @@ CREATE TABLE `loyalty_transactions` (
 
 -- Tabel Promotions: Voucher & kupon diskon (FSD 24: Kategori promo, kuota, target member)
 CREATE TABLE `promotions` (
-    `id` CHAR(36) NOT NULL DEFAULT (UUID()),
+    `id` CHAR(36) NOT NULL ,
     `code` VARCHAR(50) NOT NULL,
     `title` VARCHAR(100) NOT NULL,
     `promo_category` ENUM('general', 'voucher', 'event', 'first_visit', 'birthday', 'membership') NOT NULL DEFAULT 'general',
@@ -440,7 +440,7 @@ CREATE TABLE `promotions` (
 
 -- Tabel Promotion Usages: Catatan penggunaan kupon promo oleh pelanggan
 CREATE TABLE `promotion_usages` (
-    `id` CHAR(36) NOT NULL DEFAULT (UUID()),
+    `id` CHAR(36) NOT NULL ,
     `promotion_id` CHAR(36) NOT NULL,
     `customer_id` CHAR(36) NOT NULL,
     `booking_id` CHAR(36) NOT NULL,
@@ -456,7 +456,7 @@ CREATE TABLE `promotion_usages` (
 
 -- Tabel Notifications: Notifikasi FCM & In-App (FSD 26: Booking, Reminder, Queue, Promo, Rebooking)
 CREATE TABLE `notifications` (
-    `id` CHAR(36) NOT NULL DEFAULT (UUID()),
+    `id` CHAR(36) NOT NULL ,
     `user_id` CHAR(36) NOT NULL,
     `title` VARCHAR(150) NOT NULL,
     `body` TEXT NOT NULL,

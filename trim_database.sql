@@ -52,7 +52,7 @@ SET FOREIGN_KEY_CHECKS = 1;
 
 -- 1. USERS & MEMBERSHIPS (RBAC: Owner, Manager, Admin, Barber, Customer)
 CREATE TABLE `users` (
-    `id` CHAR(36) NOT NULL DEFAULT (UUID()),
+    `id` CHAR(36) NOT NULL ,
     `email` VARCHAR(191) NOT NULL,
     `password_hash` VARCHAR(255) NOT NULL,
     `role` ENUM('owner', 'manager', 'admin', 'barber', 'customer') NOT NULL DEFAULT 'customer',
@@ -65,7 +65,7 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `memberships` (
-    `id` CHAR(36) NOT NULL DEFAULT (UUID()),
+    `id` CHAR(36) NOT NULL ,
     `tier_name` VARCHAR(50) NOT NULL,
     `discount_percentage` DECIMAL(5, 2) NOT NULL DEFAULT 0.00,
     `minimum_points_required` INT UNSIGNED NOT NULL DEFAULT 0,
@@ -87,7 +87,7 @@ CREATE TABLE `face_shapes` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `barbers` (
-    `id` CHAR(36) NOT NULL DEFAULT (UUID()),
+    `id` CHAR(36) NOT NULL ,
     `user_id` CHAR(36) NOT NULL,
     `full_name` VARCHAR(100) NOT NULL,
     `phone_number` VARCHAR(20) NOT NULL,
@@ -107,7 +107,7 @@ CREATE TABLE `barbers` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `services` (
-    `id` CHAR(36) NOT NULL DEFAULT (UUID()),
+    `id` CHAR(36) NOT NULL ,
     `name` VARCHAR(100) NOT NULL,
     `category` VARCHAR(50) NOT NULL DEFAULT 'Haircut',
     `duration_minutes` INT UNSIGNED NOT NULL DEFAULT 30,
@@ -123,7 +123,7 @@ CREATE TABLE `services` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `hairstyles` (
-    `id` CHAR(36) NOT NULL DEFAULT (UUID()),
+    `id` CHAR(36) NOT NULL ,
     `name` VARCHAR(100) NOT NULL,
     `image_url` VARCHAR(255) NULL,
     `description` TEXT NULL,
@@ -148,7 +148,7 @@ CREATE TABLE `hairstyle_face_shapes` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `customers` (
-    `id` CHAR(36) NOT NULL DEFAULT (UUID()),
+    `id` CHAR(36) NOT NULL ,
     `user_id` CHAR(36) NOT NULL,
     `full_name` VARCHAR(100) NOT NULL,
     `phone_number` VARCHAR(20) NOT NULL,
@@ -172,7 +172,7 @@ CREATE TABLE `customers` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `barber_schedules` (
-    `id` CHAR(36) NOT NULL DEFAULT (UUID()),
+    `id` CHAR(36) NOT NULL ,
     `barber_id` CHAR(36) NOT NULL,
     `day_of_week` ENUM('Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu') NOT NULL,
     `start_time` TIME NULL,
@@ -187,7 +187,7 @@ CREATE TABLE `barber_schedules` (
 
 -- 2. AI ANALYSES & RECOMMENDATIONS
 CREATE TABLE `ai_analyses` (
-    `id` CHAR(36) NOT NULL DEFAULT (UUID()),
+    `id` CHAR(36) NOT NULL ,
     `customer_id` CHAR(36) NULL,
     `detected_face_shape_id` INT UNSIGNED NOT NULL,
     `confidence_score` DECIMAL(5, 2) NOT NULL,
@@ -200,7 +200,7 @@ CREATE TABLE `ai_analyses` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `ai_recommendations` (
-    `id` CHAR(36) NOT NULL DEFAULT (UUID()),
+    `id` CHAR(36) NOT NULL ,
     `analysis_id` CHAR(36) NOT NULL,
     `hairstyle_id` CHAR(36) NOT NULL,
     `match_percentage` DECIMAL(5, 2) NOT NULL,
@@ -212,7 +212,7 @@ CREATE TABLE `ai_recommendations` (
 
 -- 3. BOOKINGS, QUEUES, PAYMENTS, REVIEWS & HISTORY
 CREATE TABLE `bookings` (
-    `id` CHAR(36) NOT NULL DEFAULT (UUID()),
+    `id` CHAR(36) NOT NULL ,
     `booking_code` VARCHAR(20) NOT NULL,
     `customer_id` CHAR(36) NOT NULL,
     `barber_id` CHAR(36) NOT NULL,
@@ -241,7 +241,7 @@ CREATE TABLE `bookings` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `booking_services` (
-    `id` CHAR(36) NOT NULL DEFAULT (UUID()),
+    `id` CHAR(36) NOT NULL ,
     `booking_id` CHAR(36) NOT NULL,
     `service_id` CHAR(36) NOT NULL,
     `price_at_booking` DECIMAL(12, 2) NOT NULL,
@@ -252,7 +252,7 @@ CREATE TABLE `booking_services` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `queues` (
-    `id` CHAR(36) NOT NULL DEFAULT (UUID()),
+    `id` CHAR(36) NOT NULL ,
     `booking_id` CHAR(36) NOT NULL,
     `queue_number` VARCHAR(20) NOT NULL,
     `estimated_wait_time_mins` INT UNSIGNED NOT NULL DEFAULT 0,
@@ -270,7 +270,7 @@ CREATE TABLE `queues` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `payments` (
-    `id` CHAR(36) NOT NULL DEFAULT (UUID()),
+    `id` CHAR(36) NOT NULL ,
     `booking_id` CHAR(36) NOT NULL,
     `payment_method` VARCHAR(30) NOT NULL DEFAULT 'QRIS',
     `qris_reference_id` VARCHAR(100) NULL,
@@ -289,7 +289,7 @@ CREATE TABLE `payments` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `reviews` (
-    `id` CHAR(36) NOT NULL DEFAULT (UUID()),
+    `id` CHAR(36) NOT NULL ,
     `booking_id` CHAR(36) NOT NULL,
     `customer_id` CHAR(36) NOT NULL,
     `barber_id` CHAR(36) NOT NULL,
@@ -311,7 +311,7 @@ CREATE TABLE `reviews` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `customer_haircut_history` (
-    `id` CHAR(36) NOT NULL DEFAULT (UUID()),
+    `id` CHAR(36) NOT NULL ,
     `customer_id` CHAR(36) NOT NULL,
     `booking_id` CHAR(36) NOT NULL,
     `barber_id` CHAR(36) NOT NULL,
@@ -330,7 +330,7 @@ CREATE TABLE `customer_haircut_history` (
 
 -- 4. PRODUCTS & INVENTORY
 CREATE TABLE `products` (
-    `id` CHAR(36) NOT NULL DEFAULT (UUID()),
+    `id` CHAR(36) NOT NULL ,
     `sku` VARCHAR(50) NULL,
     `name` VARCHAR(100) NOT NULL,
     `category` VARCHAR(50) NOT NULL,
@@ -349,7 +349,7 @@ CREATE TABLE `products` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `inventory_transactions` (
-    `id` CHAR(36) NOT NULL DEFAULT (UUID()),
+    `id` CHAR(36) NOT NULL ,
     `product_id` CHAR(36) NOT NULL,
     `transaction_type` ENUM('stock_in', 'stock_out', 'adjustment') NOT NULL,
     `quantity` INT NOT NULL,
@@ -366,7 +366,7 @@ CREATE TABLE `inventory_transactions` (
 
 -- 5. LOYALTY, PROMOTIONS & NOTIFICATIONS
 CREATE TABLE `loyalty_transactions` (
-    `id` CHAR(36) NOT NULL DEFAULT (UUID()),
+    `id` CHAR(36) NOT NULL ,
     `customer_id` CHAR(36) NOT NULL,
     `points` INT NOT NULL,
     `transaction_type` ENUM('earn', 'redeem', 'adjustment') NOT NULL,
@@ -379,7 +379,7 @@ CREATE TABLE `loyalty_transactions` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `promotions` (
-    `id` CHAR(36) NOT NULL DEFAULT (UUID()),
+    `id` CHAR(36) NOT NULL ,
     `code` VARCHAR(50) NOT NULL,
     `title` VARCHAR(100) NOT NULL,
     `promo_category` ENUM('general', 'voucher', 'event', 'first_visit', 'birthday', 'membership') NOT NULL DEFAULT 'general',
@@ -402,7 +402,7 @@ CREATE TABLE `promotions` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `promotion_usages` (
-    `id` CHAR(36) NOT NULL DEFAULT (UUID()),
+    `id` CHAR(36) NOT NULL ,
     `promotion_id` CHAR(36) NOT NULL,
     `customer_id` CHAR(36) NOT NULL,
     `booking_id` CHAR(36) NOT NULL,
@@ -417,7 +417,7 @@ CREATE TABLE `promotion_usages` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `notifications` (
-    `id` CHAR(36) NOT NULL DEFAULT (UUID()),
+    `id` CHAR(36) NOT NULL ,
     `user_id` CHAR(36) NOT NULL,
     `title` VARCHAR(150) NOT NULL,
     `body` TEXT NOT NULL,

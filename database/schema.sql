@@ -48,7 +48,7 @@ SET FOREIGN_KEY_CHECKS = 1;
 
 -- Tabel Users: Akun login sentral untuk seluruh role (RBAC)
 CREATE TABLE `users` (
-    `id` CHAR(36) NOT NULL DEFAULT (UUID()),
+    `id` CHAR(36) NOT NULL ,
     `email` VARCHAR(191) NOT NULL,
     `password_hash` VARCHAR(255) NOT NULL,
     `role` ENUM('owner', 'admin', 'barber', 'customer') NOT NULL DEFAULT 'customer',
@@ -61,7 +61,7 @@ CREATE TABLE `users` (
 
 -- Tabel Memberships: Tingkatan keanggotaan customer (Silver, Gold, Platinum)
 CREATE TABLE `memberships` (
-    `id` CHAR(36) NOT NULL DEFAULT (UUID()),
+    `id` CHAR(36) NOT NULL ,
     `tier_name` VARCHAR(50) NOT NULL,
     `discount_percentage` DECIMAL(5, 2) NOT NULL DEFAULT 0.00,
     `minimum_points_required` INT UNSIGNED NOT NULL DEFAULT 0,
@@ -73,7 +73,7 @@ CREATE TABLE `memberships` (
 
 -- Tabel Customers: Profil data spesifik pelanggan
 CREATE TABLE `customers` (
-    `id` CHAR(36) NOT NULL DEFAULT (UUID()),
+    `id` CHAR(36) NOT NULL ,
     `user_id` CHAR(36) NOT NULL,
     `full_name` VARCHAR(100) NOT NULL,
     `phone_number` VARCHAR(20) NOT NULL,
@@ -92,7 +92,7 @@ CREATE TABLE `customers` (
 
 -- Tabel Barbers: Profil kapster / tukang cukur
 CREATE TABLE `barbers` (
-    `id` CHAR(36) NOT NULL DEFAULT (UUID()),
+    `id` CHAR(36) NOT NULL ,
     `user_id` CHAR(36) NOT NULL,
     `full_name` VARCHAR(100) NOT NULL,
     `phone_number` VARCHAR(20) NOT NULL,
@@ -111,7 +111,7 @@ CREATE TABLE `barbers` (
 
 -- Tabel Barber Schedules: Jadwal shift harian kapster
 CREATE TABLE `barber_schedules` (
-    `id` CHAR(36) NOT NULL DEFAULT (UUID()),
+    `id` CHAR(36) NOT NULL ,
     `barber_id` CHAR(36) NOT NULL,
     `day_of_week` ENUM('Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu') NOT NULL,
     `start_time` TIME NULL,
@@ -130,7 +130,7 @@ CREATE TABLE `barber_schedules` (
 
 -- Tabel Services: Katalog paket / layanan pangkas
 CREATE TABLE `services` (
-    `id` CHAR(36) NOT NULL DEFAULT (UUID()),
+    `id` CHAR(36) NOT NULL ,
     `name` VARCHAR(100) NOT NULL,
     `category` VARCHAR(50) NOT NULL DEFAULT 'Haircut',
     `duration_minutes` INT UNSIGNED NOT NULL DEFAULT 30,
@@ -154,7 +154,7 @@ CREATE TABLE `face_shapes` (
 
 -- Tabel Hairstyles: Katalog model gaya rambut
 CREATE TABLE `hairstyles` (
-    `id` CHAR(36) NOT NULL DEFAULT (UUID()),
+    `id` CHAR(36) NOT NULL ,
     `name` VARCHAR(100) NOT NULL,
     `image_url` VARCHAR(255) NULL,
     `description` TEXT NULL,
@@ -178,7 +178,7 @@ CREATE TABLE `hairstyle_face_shapes` (
 
 -- Tabel AI Analyses: Riwayat deteksi bentuk wajah oleh AI Computer Vision
 CREATE TABLE `ai_analyses` (
-    `id` CHAR(36) NOT NULL DEFAULT (UUID()),
+    `id` CHAR(36) NOT NULL ,
     `customer_id` CHAR(36) NULL, -- Bisa NULL bila pengguna anonim/tamu
     `detected_face_shape_id` INT UNSIGNED NOT NULL,
     `confidence_score` DECIMAL(5, 2) NOT NULL,
@@ -192,7 +192,7 @@ CREATE TABLE `ai_analyses` (
 
 -- Tabel AI Recommendations: Rekomendasi gaya rambut berdasarkan hasil analisis
 CREATE TABLE `ai_recommendations` (
-    `id` CHAR(36) NOT NULL DEFAULT (UUID()),
+    `id` CHAR(36) NOT NULL ,
     `analysis_id` CHAR(36) NOT NULL,
     `hairstyle_id` CHAR(36) NOT NULL,
     `match_percentage` DECIMAL(5, 2) NOT NULL,
@@ -208,7 +208,7 @@ CREATE TABLE `ai_recommendations` (
 
 -- Tabel Bookings: Reservasi pangkas oleh pelanggan
 CREATE TABLE `bookings` (
-    `id` CHAR(36) NOT NULL DEFAULT (UUID()),
+    `id` CHAR(36) NOT NULL ,
     `booking_code` VARCHAR(20) NOT NULL, -- e.g. TRM-20261014-001
     `customer_id` CHAR(36) NOT NULL,
     `barber_id` CHAR(36) NOT NULL,
@@ -232,7 +232,7 @@ CREATE TABLE `bookings` (
 
 -- Tabel Booking Services: Layanan yang dipilih dalam satu reservasi (Many-to-Many)
 CREATE TABLE `booking_services` (
-    `id` CHAR(36) NOT NULL DEFAULT (UUID()),
+    `id` CHAR(36) NOT NULL ,
     `booking_id` CHAR(36) NOT NULL,
     `service_id` CHAR(36) NOT NULL,
     `price_at_booking` DECIMAL(12, 2) NOT NULL,
@@ -244,7 +244,7 @@ CREATE TABLE `booking_services` (
 
 -- Tabel Queues: Antrean fisik / check-in di barbershop
 CREATE TABLE `queues` (
-    `id` CHAR(36) NOT NULL DEFAULT (UUID()),
+    `id` CHAR(36) NOT NULL ,
     `booking_id` CHAR(36) NOT NULL,
     `queue_number` VARCHAR(20) NOT NULL, -- e.g. A-023
     `estimated_wait_time_mins` INT UNSIGNED NOT NULL DEFAULT 0,
@@ -260,7 +260,7 @@ CREATE TABLE `queues` (
 
 -- Tabel Payments: Transaksi pembayaran (Pakkasir QRIS Gateway)
 CREATE TABLE `payments` (
-    `id` CHAR(36) NOT NULL DEFAULT (UUID()),
+    `id` CHAR(36) NOT NULL ,
     `booking_id` CHAR(36) NOT NULL,
     `qris_reference_id` VARCHAR(100) NULL COMMENT 'Ref ID dari payment gateway Pakkasir',
     `amount` DECIMAL(12, 2) NOT NULL,
@@ -277,7 +277,7 @@ CREATE TABLE `payments` (
 
 -- Tabel Reviews: Ulasan dan rating dari pelanggan setelah selesai pangkas
 CREATE TABLE `reviews` (
-    `id` CHAR(36) NOT NULL DEFAULT (UUID()),
+    `id` CHAR(36) NOT NULL ,
     `booking_id` CHAR(36) NOT NULL,
     `customer_id` CHAR(36) NOT NULL,
     `barber_id` CHAR(36) NOT NULL,
@@ -302,7 +302,7 @@ CREATE TABLE `reviews` (
 
 -- Tabel Products: Produk ritel barbershop (pomade, shampoo, tonic, dll)
 CREATE TABLE `products` (
-    `id` CHAR(36) NOT NULL DEFAULT (UUID()),
+    `id` CHAR(36) NOT NULL ,
     `name` VARCHAR(100) NOT NULL,
     `category` VARCHAR(50) NOT NULL, -- Pomade, Shampoo, dll
     `stock_quantity` INT NOT NULL DEFAULT 0,
@@ -318,7 +318,7 @@ CREATE TABLE `products` (
 
 -- Tabel Inventory Transactions: Log mutasi stok produk (masuk, keluar, penyesuaian)
 CREATE TABLE `inventory_transactions` (
-    `id` CHAR(36) NOT NULL DEFAULT (UUID()),
+    `id` CHAR(36) NOT NULL ,
     `product_id` CHAR(36) NOT NULL,
     `transaction_type` ENUM('stock_in', 'stock_out', 'adjustment') NOT NULL,
     `quantity` INT NOT NULL,
@@ -336,7 +336,7 @@ CREATE TABLE `inventory_transactions` (
 
 -- Tabel Loyalty Transactions: Riwayat perolehan & penukaran poin loyalitas
 CREATE TABLE `loyalty_transactions` (
-    `id` CHAR(36) NOT NULL DEFAULT (UUID()),
+    `id` CHAR(36) NOT NULL ,
     `customer_id` CHAR(36) NOT NULL,
     `points` INT NOT NULL, -- Positif (+) earn, negatif (-) redeem
     `transaction_type` ENUM('earn', 'redeem', 'adjustment') NOT NULL,
@@ -350,7 +350,7 @@ CREATE TABLE `loyalty_transactions` (
 
 -- Tabel Promotions: Voucher & kupon diskon
 CREATE TABLE `promotions` (
-    `id` CHAR(36) NOT NULL DEFAULT (UUID()),
+    `id` CHAR(36) NOT NULL ,
     `code` VARCHAR(50) NOT NULL,
     `title` VARCHAR(100) NOT NULL,
     `discount_type` ENUM('percentage', 'fixed') NOT NULL,
@@ -369,7 +369,7 @@ CREATE TABLE `promotions` (
 
 -- Tabel Promotion Usages: Catatan penggunaan voucher oleh customer
 CREATE TABLE `promotion_usages` (
-    `id` CHAR(36) NOT NULL DEFAULT (UUID()),
+    `id` CHAR(36) NOT NULL ,
     `promotion_id` CHAR(36) NOT NULL,
     `customer_id` CHAR(36) NOT NULL,
     `booking_id` CHAR(36) NOT NULL,
@@ -385,7 +385,7 @@ CREATE TABLE `promotion_usages` (
 
 -- Tabel Notifications: Notifikasi push FCM (Firebase Cloud Messaging) & in-app
 CREATE TABLE `notifications` (
-    `id` CHAR(36) NOT NULL DEFAULT (UUID()),
+    `id` CHAR(36) NOT NULL ,
     `user_id` CHAR(36) NOT NULL,
     `title` VARCHAR(150) NOT NULL,
     `body` TEXT NOT NULL,
